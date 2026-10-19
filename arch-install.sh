@@ -20,7 +20,7 @@ WIFI_SSID="TNCAP5013CC"       # la password viene chiesta durante l'esecuzione
 RTC_LOCALTIME="yes"           # "yes" SOLO se hai anche Windows (Ubuntu usa UTC)
 INSTALL_YAY="yes"             # installa yay (yay-bin, senza compilare Go)
 INSTALL_CHROME="yes"          # google-chrome da AUR (richiede INSTALL_YAY=yes)
-EXTRA_PKGS="mesa vulkan-radeon firefox vscodium nvim kitty"    # es. "vulkan-radeon" oppure "nvidia-open nvidia-utils"
+EXTRA_PKGS="vulkan-radeon firefox vscodium nvim zsh"    # es. "vulkan-radeon" oppure "nvidia-open nvidia-utils"
 ### ==========================================================================
 
 msg()  { printf '\n\033[1;34m==>\033[0m \033[1m%s\033[0m\n' "$*"; }
