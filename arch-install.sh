@@ -100,7 +100,7 @@ pacstrap -K /mnt \
     hyprland kitty waybar wofi xdg-desktop-portal-hyprland polkit \
     pipewire pipewire-pulse wireplumber \
     ttf-dejavu noto-fonts mesa \
-    firefox vscodium nvim zsh \
+    firefox nvim zsh \
     $EXTRA_PKGS
 
 genfstab -U /mnt > /mnt/etc/fstab
