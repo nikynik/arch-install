@@ -98,6 +98,7 @@ pacstrap -K /mnt \
     nano sudo git networkmanager wpa_supplicant \
     grub efibootmgr os-prober ntfs-3g dosfstools \
     hyprland kitty waybar rofi xdg-desktop-portal-hyprland polkit \
+    sddm qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg quickshell \
     pipewire pipewire-pulse wireplumber \
     ttf-dejavu noto-fonts mesa \
     firefox nvim zsh \
@@ -139,6 +140,9 @@ cat > /etc/hosts <<HOSTS
 127.0.1.1   $HOSTNAME.localdomain $HOSTNAME
 HOSTS
 systemctl enable NetworkManager
+
+msg "SDDM (display manager)"
+systemctl enable sddm
 
 if [[ -n ${WIFI_PASS:-} ]]; then
     # profilo Wi-Fi gia' pronto: al primo avvio si connette da solo
@@ -216,7 +220,10 @@ cat <<EOF
 
 Dopo il riavvio:
   - togli la USB e accedi come $USERNAME
-  - avvia Hyprland scrivendo:  Start-Hyprland
+  - SDDM parte in automatico: scegli la sessione "Hyprland" dal menu in basso e accedi
+    (in alternativa da TTY:  Start-Hyprland)
+  - Quickshell: crea la tua config in ~/.config/quickshell/ e avvialo con:  quickshell
+    (per lanciarlo con Hyprland aggiungi in hyprland.conf:  exec-once = quickshell)
   - Da Ubuntu aggiornare il menu GRUB con sudo update-grub
   - se RTC_LOCALTIME=yes:  sudo timedatectl set-local-rtc 1 --adjust-system-clock
   - Fare procedura installazione certificato di avvio per Archlinux
