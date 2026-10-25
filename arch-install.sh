@@ -101,7 +101,9 @@ pacstrap -K /mnt \
     sddm qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg quickshell \
     pipewire pipewire-pulse wireplumber \
     ttf-dejavu noto-fonts mesa \
-    firefox nvim zsh \
+    firefox nvim zsh fzf\
+    thunar gvfs tumbler ffmpegthumbnailer thunar-archive-plugin \
+    thunar-volman thunar-media-tags-plugin \
     $EXTRA_PKGS
 
 genfstab -U /mnt > /mnt/etc/fstab
