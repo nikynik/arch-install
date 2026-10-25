@@ -76,7 +76,7 @@ if ! ping -c1 -W3 archlinux.org &>/dev/null; then
     sleep 4
     iwctl --passphrase "$WIFI_PASS" station "$WLAN" connect "$WIFI_SSID"
     sleep 5
-    ping -c3 archlinux.org || die "Ancora nessuna rete."
+    ping -c3 google.com || die "Ancora nessuna rete."
 fi
 timedatectl set-ntp true
 timedatectl set-timezone "$TIMEZONE" || true
