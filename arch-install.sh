@@ -69,7 +69,7 @@ read -rsp "Password Wi-Fi '$WIFI_SSID' (invio = salta, es. se usi cavo): " WIFI_
 
 ### ------------------------------ Rete -------------------------------------
 msg "Rete"
-if ! ping -c1 -W3 archlinux.org &>/dev/null; then
+if ! ping -c1 -W3 google.com &>/dev/null; then
     WLAN=$(ls /sys/class/net | grep -E '^wl' | head -n1 || true)
     [[ -n $WLAN && -n $WIFI_PASS ]] || die "Nessuna connessione e nessun Wi-Fi configurabile."
     iwctl station "$WLAN" scan
