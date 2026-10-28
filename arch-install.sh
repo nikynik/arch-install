@@ -101,7 +101,7 @@ pacstrap -K /mnt \
     sddm qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg quickshell \
     pipewire pipewire-pulse wireplumber \
     ttf-dejavu noto-fonts mesa \
-    firefox nvim zsh fzf\
+    firefox nvim zsh fzf fastfetch\
     thunar gvfs tumbler ffmpegthumbnailer thunar-archive-plugin \
     thunar-volman thunar-media-tags-plugin \
     $EXTRA_PKGS
