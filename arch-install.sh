@@ -97,7 +97,7 @@ pacstrap -K /mnt \
     base base-devel linux linux-firmware amd-ucode \
     nano sudo git networkmanager wpa_supplicant \
     grub efibootmgr os-prober ntfs-3g dosfstools \
-    hyprland kitty waybar rofi xdg-desktop-portal-hyprland polkit \
+    hyprland hyprpaper kitty waybar rofi xdg-desktop-portal-hyprland polkit \
     sddm qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg quickshell \
     pipewire pipewire-pulse wireplumber \
     ttf-dejavu noto-fonts mesa \
