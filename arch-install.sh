@@ -20,6 +20,7 @@ WIFI_SSID="TNCAP5013CC"       # la password viene chiesta durante l'esecuzione
 RTC_LOCALTIME="yes"           # "yes" SOLO se hai anche Windows (Ubuntu usa UTC)
 INSTALL_YAY="yes"             # installa yay (yay-bin, senza compilare Go)
 INSTALL_CHROME="yes"          # google-chrome da AUR (richiede INSTALL_YAY=yes)
+INSTALL_VSCODIUM="yes"        # vscodium-bin da AUR (richiede INSTALL_YAY=yes)
 EXTRA_PKGS="vulkan-radeon"    # es. "vulkan-radeon" oppure "nvidia-open nvidia-utils"
 ### ==========================================================================
 
@@ -46,6 +47,12 @@ ask_pass() {  # ask_pass "Etichetta" NOMEVAR
 [[ -b $ROOT_PART ]]                  || die "$ROOT_PART non esiste."
 [[ $(blkid -s TYPE -o value "$EFI_PART" 2>/dev/null) == vfat ]] \
                                      || die "$EFI_PART non e' FAT32: non sembra una partizione EFI."
+
+# vscodium e chrome vengono dall'AUR: serve yay
+if [[ $INSTALL_YAY != yes ]]; then
+    [[ $INSTALL_CHROME   == yes ]] && warn "INSTALL_CHROME ignorato: richiede INSTALL_YAY=yes."
+    [[ $INSTALL_VSCODIUM == yes ]] && warn "INSTALL_VSCODIUM ignorato: richiede INSTALL_YAY=yes."
+fi
 
 ### ------------------------------ Tastiera/font ----------------------------
 loadkeys "$KEYMAP"
@@ -101,7 +108,7 @@ pacstrap -K /mnt \
     sddm qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg quickshell \
     pipewire pipewire-pulse wireplumber \
     ttf-dejavu noto-fonts mesa \
-    firefox nvim zsh fzf fastfetch\
+    firefox neovim zsh fzf fastfetch \
     thunar gvfs tumbler ffmpegthumbnailer thunar-archive-plugin \
     thunar-volman thunar-media-tags-plugin \
     $EXTRA_PKGS
@@ -111,7 +118,7 @@ genfstab -U /mnt > /mnt/etc/fstab
 ### ------------------------------ Variabili per il chroot ------------------
 {
     for v in HOSTNAME USERNAME TIMEZONE LOCALE KEYMAP WIFI_SSID RTC_LOCALTIME \
-             INSTALL_YAY INSTALL_CHROME ROOT_PASS USER_PASS WIFI_PASS; do
+             INSTALL_YAY INSTALL_CHROME INSTALL_VSCODIUM ROOT_PASS USER_PASS WIFI_PASS; do
         printf '%s=%q\n' "$v" "${!v}"
     done
 } > /mnt/root/vars.sh
@@ -201,8 +208,14 @@ if [[ $INSTALL_YAY == yes ]]; then
         && cd ~/yay-bin && makepkg -si --noconfirm && cd ~ && rm -rf ~/yay-bin' \
         || echo "AVVISO: installazione di yay fallita (si puo' rifare dopo)."
     if [[ $INSTALL_CHROME == yes ]] && command -v yay >/dev/null; then
+        msg "Google Chrome (AUR)"
         su - "$USERNAME" -c 'yay -S --noconfirm google-chrome' \
             || echo "AVVISO: google-chrome non installato (si puo' rifare dopo)."
+    fi
+    if [[ $INSTALL_VSCODIUM == yes ]] && command -v yay >/dev/null; then
+        msg "VSCodium (AUR: vscodium-bin)"
+        su - "$USERNAME" -c 'yay -S --noconfirm vscodium-bin' \
+            || echo "AVVISO: vscodium-bin non installato (si puo' rifare dopo)."
     fi
     cleanup
 fi
@@ -226,10 +239,11 @@ Dopo il riavvio:
     (in alternativa da TTY:  Start-Hyprland)
   - Quickshell: crea la tua config in ~/.config/quickshell/ e avvialo con:  quickshell
     (per lanciarlo con Hyprland aggiungi in hyprland.conf:  exec-once = quickshell)
+  - VSCodium (se installato): si avvia con il comando  codium
   - Da Ubuntu aggiornare il menu GRUB con sudo update-grub
   - se RTC_LOCALTIME=yes:  sudo timedatectl set-local-rtc 1 --adjust-system-clock
   - Fare procedura installazione certificato di avvio per Archlinux
 
 EOF
 read -rp "Riavviare ora? [s/N] " r
-[[ $r =~ ^[sSyY]$ ]] && reboot
+if [[ $r =~ ^[sSyY]$ ]]; then reboot; fi
