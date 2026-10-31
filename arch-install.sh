@@ -21,6 +21,7 @@ RTC_LOCALTIME="yes"           # "yes" SOLO se hai anche Windows (Ubuntu usa UTC)
 INSTALL_YAY="yes"             # installa yay (yay-bin, senza compilare Go)
 INSTALL_CHROME="yes"          # google-chrome da AUR (richiede INSTALL_YAY=yes)
 INSTALL_VSCODIUM="yes"        # vscodium-bin da AUR (richiede INSTALL_YAY=yes)
+INSTALL_MATUGEN="yes"         # matugen da AUR (richiede INSTALL_YAY=yes)
 EXTRA_PKGS="vulkan-radeon"    # es. "vulkan-radeon" oppure "nvidia-open nvidia-utils"
 ### ==========================================================================
 
@@ -52,6 +53,7 @@ ask_pass() {  # ask_pass "Etichetta" NOMEVAR
 if [[ $INSTALL_YAY != yes ]]; then
     [[ $INSTALL_CHROME   == yes ]] && warn "INSTALL_CHROME ignorato: richiede INSTALL_YAY=yes."
     [[ $INSTALL_VSCODIUM == yes ]] && warn "INSTALL_VSCODIUM ignorato: richiede INSTALL_YAY=yes."
+    [[ $INSTALL_MATUGEN  == yes ]] && warn "INSTALL_MATUGEN ignorato: richiede INSTALL_YAY=yes."
 fi
 
 ### ------------------------------ Tastiera/font ----------------------------
@@ -118,7 +120,8 @@ genfstab -U /mnt > /mnt/etc/fstab
 ### ------------------------------ Variabili per il chroot ------------------
 {
     for v in HOSTNAME USERNAME TIMEZONE LOCALE KEYMAP WIFI_SSID RTC_LOCALTIME \
-             INSTALL_YAY INSTALL_CHROME INSTALL_VSCODIUM ROOT_PASS USER_PASS WIFI_PASS; do
+         INSTALL_YAY INSTALL_CHROME INSTALL_VSCODIUM INSTALL_MATUGEN \
+         ROOT_PASS USER_PASS WIFI_PASS; do
         printf '%s=%q\n' "$v" "${!v}"
     done
 } > /mnt/root/vars.sh
@@ -216,6 +219,11 @@ if [[ $INSTALL_YAY == yes ]]; then
         msg "VSCodium (AUR: vscodium-bin)"
         su - "$USERNAME" -c 'yay -S --noconfirm vscodium-bin' \
             || echo "AVVISO: vscodium-bin non installato (si puo' rifare dopo)."
+    fi
+        if [[ $INSTALL_MATUGEN == yes ]] && command -v yay >/dev/null; then
+        msg "Matugen (AUR)"
+        su - "$USERNAME" -c 'yay -S --noconfirm matugen' \
+            || echo "AVVISO: matugen non installato (si puo' rifare dopo)."
     fi
     cleanup
 fi
