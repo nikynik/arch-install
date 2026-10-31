@@ -52,7 +52,7 @@ OPTIONAL_PKGS=(
     qt5-wayland qt6-wayland               # app Qt native Wayland
     xdg-desktop-portal-gtk                # portal per app GTK (Firefox, Thunar...)
     noto-fonts-emoji ttf-nerd-fonts-symbols
-    hypridle hyprlock                     # blocco schermo / idle
+    hypridle                              # blocco schermo / idle
 )
 # EXTRA_PKGS (configurazione) viene trattato come opzionale
 read -ra EXTRA_ARR <<< "${EXTRA_PKGS:-}"
