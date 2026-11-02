@@ -121,6 +121,10 @@ if ! ping -c1 -W3 1.1.1.1 &>/dev/null; then
     sleep 5
     ping -c3 1.1.1.1 || die "Ancora nessuna rete."
 fi
+
+# DNS (Cloudflare) per la live USB; lo script gira gia' come root, quindi niente sudo
+printf 'nameserver 1.1.1.1\nnameserver 1.0.0.1\n' | tee /etc/resolv.conf >/dev/null
+
 timedatectl set-ntp true
 timedatectl set-timezone "$TIMEZONE" || true
 
@@ -199,6 +203,14 @@ cat > /etc/hosts <<HOSTS
 127.0.1.1   $HOSTNAME.localdomain $HOSTNAME
 HOSTS
 systemctl enable NetworkManager
+
+# DNS fisso: NetworkManager non deve riscrivere /etc/resolv.conf
+# (il file viene scritto dallo script esterno dopo l'uscita dal chroot)
+mkdir -p /etc/NetworkManager/conf.d
+cat > /etc/NetworkManager/conf.d/90-dns-fisso.conf <<NMDNS
+[main]
+dns=none
+NMDNS
 
 msg "Bluetooth"
 systemctl enable bluetooth
@@ -285,6 +297,12 @@ chmod 700 /mnt/root/chroot-setup.sh
 msg "Configurazione nel sistema appena installato"
 arch-chroot /mnt /root/chroot-setup.sh
 rm -f /mnt/root/chroot-setup.sh /mnt/root/vars.sh
+
+# DNS permanente nel sistema installato. Va scritto QUI (fuori dal chroot):
+# dentro arch-chroot /etc/resolv.conf e' un bind mount di quello della live USB.
+msg "DNS fisso (1.1.1.1 + 1.0.0.1) nel sistema installato"
+rm -f /mnt/etc/resolv.conf
+printf 'nameserver 1.1.1.1\nnameserver 1.0.0.1\n' > /mnt/etc/resolv.conf
 
 ### ------------------------------ Fine -------------------------------------
 umount -R /mnt
