@@ -33,7 +33,7 @@ REQUIRED_PKGS=(
     base base-devel linux linux-firmware amd-ucode
     nano sudo git wget curl networkmanager wpa_supplicant
     grub efibootmgr os-prober ntfs-3g dosfstools
-    hyprland hyprpaper kitty waybar rofi xdg-desktop-portal-hyprland polkit
+    hyprland awww kitty waybar rofi xdg-desktop-portal-hyprland polkit
     sddm qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg quickshell
     pipewire pipewire-pulse pipewire-alsa wireplumber alsa-utils
     bluez bluez-utils
