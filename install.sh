@@ -33,7 +33,7 @@ EXTRA_PKGS="vulkan-radeon"    # es. "vulkan-radeon" oppure "nvidia-open nvidia-u
 # toccare i dischi.
 REQUIRED_PKGS=(
     base base-devel linux linux-firmware amd-ucode
-    nano sudo git wget curl networkmanager wpa_supplicant
+    nano sudo git wget curl network-manager-applet networkmanager wpa_supplicant
     grub efibootmgr os-prober ntfs-3g dosfstools
     hyprland awww kitty waybar rofi xdg-desktop-portal-hyprland polkit
     sddm qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg quickshell
