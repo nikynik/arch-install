@@ -42,7 +42,7 @@ REQUIRED_PKGS=(
     ttf-dejavu noto-fonts mesa
     firefox neovim zsh fzf fastfetch
     thunar gvfs tumbler ffmpegthumbnailer thunar-archive-plugin
-    thunar-volman thunar-media-tags-plugin copyq mdp mdp-mpris kanshi
+    thunar-volman thunar-media-tags-plugin copyq mdp mdp-mpris kanshi ncmpcpp
 )
 # OPZIONALI: se mancano vengono saltati con un avviso (non bloccano l'installazione).
 # Ottimizzati per Matebook D5 / Ryzen 7 3700U / Vega Mobile.
