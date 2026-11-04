@@ -2,7 +2,7 @@
 # ============================================================================
 #  Installazione automatica Arch Linux  (UEFI + dual boot + GRUB + Hyprland)
 #  Target: Huawei Matebook D5 (Ryzen 7 3700U, Radeon Vega Mobile Gfx)
-#  Da lanciare come root dalla live USB:   bash arch-install.sh
+#  Da lanciare come root dalla live USB:   bash install.sh
 #
 #  NON formatta la partizione EFI (condivisa con Ubuntu): formatta SOLO ROOT_PART.
 # ============================================================================
@@ -24,6 +24,7 @@ INSTALL_CHROME="yes"          # google-chrome da AUR (richiede INSTALL_YAY=yes)
 INSTALL_VSCODIUM="yes"        # vscodium-bin da AUR (richiede INSTALL_YAY=yes)
 INSTALL_MATUGEN="yes"         # matugen da AUR (richiede INSTALL_YAY=yes)
 INSTALL_WAYPAPER="yes"        # waypaper da AUR (richiede INSTALL_YAY=yes)
+INSTALL_WALLUST="yes"         # wallust via yay (richiede INSTALL_YAY=yes)
 EXTRA_PKGS="vulkan-radeon"    # es. "vulkan-radeon" oppure "nvidia-open nvidia-utils"
 ### ==========================================================================
 
@@ -84,12 +85,13 @@ ask_pass() {  # ask_pass "Etichetta" NOMEVAR
 [[ $(blkid -s TYPE -o value "$EFI_PART" 2>/dev/null) == vfat ]] \
                                      || die "$EFI_PART non e' FAT32: non sembra una partizione EFI."
 
-# vscodium, chrome e matugen vengono dall'AUR: serve yay
+# chrome, vscodium, matugen, waypaper e wallust vengono installati con yay
 if [[ $INSTALL_YAY != yes ]]; then
     [[ $INSTALL_CHROME   == yes ]] && warn "INSTALL_CHROME ignorato: richiede INSTALL_YAY=yes."
     [[ $INSTALL_VSCODIUM == yes ]] && warn "INSTALL_VSCODIUM ignorato: richiede INSTALL_YAY=yes."
     [[ $INSTALL_MATUGEN  == yes ]] && warn "INSTALL_MATUGEN ignorato: richiede INSTALL_YAY=yes."
     [[ $INSTALL_WAYPAPER == yes ]] && warn "INSTALL_WAYPAPER ignorato: richiede INSTALL_YAY=yes."
+    [[ $INSTALL_WALLUST  == yes ]] && warn "INSTALL_WALLUST ignorato: richiede INSTALL_YAY=yes."
 fi
 
 ### ------------------------------ Tastiera/font ----------------------------
@@ -136,6 +138,10 @@ timedatectl set-timezone "$TIMEZONE" || true
 msg "Sincronizzazione database e verifica pacchetti (pacman -Si)"
 pacman -Sy --noconfirm >/dev/null || die "Impossibile sincronizzare i database di pacman (DNS/rete?)."
 
+# Keyring aggiornato: evita errori di firma in pacstrap con ISO datate
+pacman -S --noconfirm --needed archlinux-keyring >/dev/null \
+    || warn "aggiornamento archlinux-keyring fallito (si prosegue)."
+
 missing=()
 for p in "${REQUIRED_PKGS[@]}"; do
     pacman -Si "$p" &>/dev/null || missing+=("$p")
@@ -173,7 +179,7 @@ genfstab -U /mnt > /mnt/etc/fstab
 ### ------------------------------ Variabili per il chroot ------------------
 {
     for v in HOSTNAME USERNAME TIMEZONE LOCALE KEYMAP WIFI_SSID RTC_LOCALTIME \
-         INSTALL_YAY INSTALL_CHROME INSTALL_VSCODIUM INSTALL_MATUGEN INSTALL_WAYPAPER \
+         INSTALL_YAY INSTALL_CHROME INSTALL_VSCODIUM INSTALL_MATUGEN INSTALL_WAYPAPER INSTALL_WALLUST \
          ROOT_PASS USER_PASS WIFI_PASS; do
         printf '%s=%q\n' "$v" "${!v}"
     done
@@ -290,9 +296,14 @@ if [[ $INSTALL_YAY == yes ]]; then
             || echo "AVVISO: matugen non installato (si puo' rifare dopo)."
     fi
     if [[ $INSTALL_WAYPAPER == yes ]] && command -v yay >/dev/null; then
-        msg "Waipaper (AUR)"
+        msg "Waypaper (AUR)"
         su - "$USERNAME" -c 'yay -S --noconfirm waypaper' \
-            || echo "AVVISO: vscodium-bin non installato (si puo' rifare dopo)."
+            || echo "AVVISO: waypaper non installato (si puo' rifare dopo)."
+    fi
+    if [[ $INSTALL_WALLUST == yes ]] && command -v yay >/dev/null; then
+        msg "Wallust"
+        su - "$USERNAME" -c 'yay -S --noconfirm wallust' \
+            || echo "AVVISO: wallust non installato (si puo' rifare dopo)."
     fi
     cleanup
 fi
@@ -325,6 +336,7 @@ Dopo il riavvio:
   - Bluetooth: il servizio e' gia' attivo; usa  bluetoothctl  (power on, scan on, pair <MAC>, connect <MAC>)
   - Audio: PipeWire + WirePlumber; controlla con  wpctl status
   - VSCodium (se installato): si avvia con il comando  codium
+  - Wallust (se installato): genera i colori da un wallpaper con  wallust run <immagine>
   - Da Ubuntu aggiornare il menu GRUB con sudo update-grub
   - se RTC_LOCALTIME=yes:  sudo timedatectl set-local-rtc 1 --adjust-system-clock
   - Fare procedura installazione certificato di avvio per Archlinux
