@@ -39,7 +39,7 @@ REQUIRED_PKGS=(
     pipewire pipewire-pulse pipewire-alsa wireplumber alsa-utils
     bluez bluez-utils ttf-dejavu noto-fonts mesa firefox neovim zsh fzf fastfetch
     thunar gvfs tumbler ffmpegthumbnailer thunar-archive-plugin
-    thunar-volman thunar-media-tags-plugin swaync
+    thunar-volman thunar-media-tags-plugin swaync ncmpcpp nodejs npm
     yazi ffmpeg 7zip jq poppler fd ripgrep zoxide resvg imagemagick
 )
 # OPZIONALI: se mancano vengono saltati con un avviso (non bloccano l'installazione).
