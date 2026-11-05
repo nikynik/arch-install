@@ -38,7 +38,7 @@ REQUIRED_PKGS=(
     hyprland awww kitty waybar rofi xdg-desktop-portal-hyprland polkit
     sddm qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg ffmpeg 7zip quickshell
     pipewire pipewire-pulse pipewire-alsa wireplumber alsa-utils
-    bluez bluez-utils ttf-dejavu noto-fonts mesa yazi
+    bluez bluez-utils ttf-dejavu noto-fonts mesa yazi swaync
     firefox neovim zsh fastfetch fd ripgrep fzf zoxide resvg imagemagick
     thunar gvfs tumbler ffmpegthumbnailer thunar-archive-plugin jq
     thunar-volman thunar-media-tags-plugin copyq mdp mdp-mpris kanshi ncmpcpp
