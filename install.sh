@@ -25,6 +25,8 @@ INSTALL_VSCODIUM="yes"        # vscodium-bin da AUR (richiede INSTALL_YAY=yes)
 INSTALL_MATUGEN="yes"         # matugen da AUR (richiede INSTALL_YAY=yes)
 INSTALL_WAYPAPER="yes"        # waypaper da AUR (richiede INSTALL_YAY=yes)
 INSTALL_WALLUST="yes"         # wallust via yay (richiede INSTALL_YAY=yes)
+INSTALL_CAVABG="yes"          # cava-bg da AUR (richiede INSTALL_YAY=yes)
+INSTALL_GLAVA="yes"           # glava da AUR (richiede INSTALL_YAY=yes)
 EXTRA_PKGS="vulkan-radeon"    # es. "vulkan-radeon" oppure "nvidia-open nvidia-utils"
 ### ==========================================================================
 
@@ -41,7 +43,7 @@ REQUIRED_PKGS=(
     bluez bluez-utils ttf-dejavu noto-fonts mesa yazi swaync
     firefox neovim zsh fastfetch fd ripgrep fzf zoxide resvg imagemagick
     thunar gvfs tumbler ffmpegthumbnailer thunar-archive-plugin jq
-    thunar-volman thunar-media-tags-plugin copyq mdp mdp-mpris kanshi ncmpcpp
+    thunar-volman thunar-media-tags-plugin copyq mpd mpd-mpris kanshi ncmpcpp
 )
 # OPZIONALI: se mancano vengono saltati con un avviso (non bloccano l'installazione).
 # Ottimizzati per Matebook D5 / Ryzen 7 3700U / Vega Mobile.
@@ -91,6 +93,8 @@ if [[ $INSTALL_YAY != yes ]]; then
     [[ $INSTALL_MATUGEN  == yes ]] && warn "INSTALL_MATUGEN ignorato: richiede INSTALL_YAY=yes."
     [[ $INSTALL_WAYPAPER == yes ]] && warn "INSTALL_WAYPAPER ignorato: richiede INSTALL_YAY=yes."
     [[ $INSTALL_WALLUST  == yes ]] && warn "INSTALL_WALLUST ignorato: richiede INSTALL_YAY=yes."
+    [[ $INSTALL_CAVABG   == yes ]] && warn "INSTALL_CAVABG ignorato: richiede INSTALL_YAY=yes."
+    [[ $INSTALL_GLAVA    == yes ]] && warn "INSTALL_GLAVA ignorato: richiede INSTALL_YAY=yes."
 fi
 
 ### ------------------------------ Tastiera/font ----------------------------
@@ -178,7 +182,7 @@ genfstab -U /mnt > /mnt/etc/fstab
 ### ------------------------------ Variabili per il chroot ------------------
 {
     for v in HOSTNAME USERNAME TIMEZONE LOCALE KEYMAP WIFI_SSID RTC_LOCALTIME \
-         INSTALL_YAY INSTALL_CHROME INSTALL_VSCODIUM INSTALL_MATUGEN INSTALL_WAYPAPER INSTALL_WALLUST \
+         INSTALL_YAY INSTALL_CHROME INSTALL_VSCODIUM INSTALL_MATUGEN INSTALL_WAYPAPER INSTALL_WALLUST INSTALL_CAVABG INSTALL_GLAVA \
          ROOT_PASS USER_PASS WIFI_PASS; do
         printf '%s=%q\n' "$v" "${!v}"
     done
@@ -304,6 +308,16 @@ if [[ $INSTALL_YAY == yes ]]; then
         su - "$USERNAME" -c 'yay -S --noconfirm wallust' \
             || echo "AVVISO: wallust non installato (si puo' rifare dopo)."
     fi
+    if [[ $INSTALL_CAVABG == yes ]] && command -v yay >/dev/null; then
+        msg "cava-bg (AUR)"
+        su - "$USERNAME" -c 'yay -S --noconfirm cava-bg' \
+            || echo "AVVISO: cava-bg non installato (si puo' rifare dopo)."
+    fi
+    if [[ $INSTALL_GLAVA == yes ]] && command -v yay >/dev/null; then
+        msg "GLava (AUR)"
+        su - "$USERNAME" -c 'yay -S --noconfirm glava' \
+            || echo "AVVISO: glava non installato (si puo' rifare dopo)."
+    fi
     cleanup
 fi
 
@@ -329,13 +343,15 @@ cat <<EOF
 Dopo il riavvio:
   - togli la USB e accedi come $USERNAME
   - SDDM parte in automatico: scegli la sessione "Hyprland" dal menu in basso e accedi
-    (in alternativa da TTY:  Start-Hyprland)
+    (in alternativa da TTY:  start-hyprland)
   - Quickshell: crea la tua config in ~/.config/quickshell/ e avvialo con:  quickshell
     (per lanciarlo con Hyprland aggiungi in hyprland.conf:  exec-once = quickshell)
   - Bluetooth: il servizio e' gia' attivo; usa  bluetoothctl  (power on, scan on, pair <MAC>, connect <MAC>)
   - Audio: PipeWire + WirePlumber; controlla con  wpctl status
   - VSCodium (se installato): si avvia con il comando  codium
   - Wallust (se installato): genera i colori da un wallpaper con  wallust run <immagine>
+  - cava-bg (se installato): configurazione in ~/.config/cava-bg/, avvio con exec-once = cava-bg in hyprland.conf
+  - GLava (se installato): visualizzatore audio, si avvia con  glava  (config in ~/.config/glava/)
   - Da Ubuntu aggiornare il menu GRUB con sudo update-grub
   - se RTC_LOCALTIME=yes:  sudo timedatectl set-local-rtc 1 --adjust-system-clock
   - Fare procedura installazione certificato di avvio per Archlinux
