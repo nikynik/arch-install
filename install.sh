@@ -36,12 +36,11 @@ REQUIRED_PKGS=(
     nano sudo git wget curl network-manager-applet networkmanager wpa_supplicant
     grub efibootmgr os-prober ntfs-3g dosfstools
     hyprland awww kitty waybar rofi xdg-desktop-portal-hyprland polkit
-    sddm qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg quickshell
+    sddm qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg ffmpeg 7zip quickshell
     pipewire pipewire-pulse pipewire-alsa wireplumber alsa-utils
-    bluez bluez-utils
-    ttf-dejavu noto-fonts mesa
-    firefox neovim zsh fzf fastfetch
-    thunar gvfs tumbler ffmpegthumbnailer thunar-archive-plugin
+    bluez bluez-utils ttf-dejavu noto-fonts mesa yazi
+    firefox neovim zsh fastfetch fd ripgrep fzf zoxide resvg imagemagick
+    thunar gvfs tumbler ffmpegthumbnailer thunar-archive-plugin jq
     thunar-volman thunar-media-tags-plugin copyq mdp mdp-mpris kanshi ncmpcpp
 )
 # OPZIONALI: se mancano vengono saltati con un avviso (non bloccano l'installazione).
