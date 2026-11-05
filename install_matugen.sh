@@ -2,7 +2,7 @@
 # ============================================================================
 #  Installazione automatica Arch Linux  (UEFI + dual boot + GRUB + Hyprland)
 #  Target: Huawei Matebook D5 (Ryzen 7 3700U, Radeon Vega Mobile Gfx)
-#  Da lanciare come root dalla live USB:   bash install.sh
+#  Da lanciare come root dalla live USB:   bash install_matugen.sh
 #
 #  NON formatta la partizione EFI (condivisa con Ubuntu): formatta SOLO ROOT_PART.
 # ============================================================================
